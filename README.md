@@ -1,10 +1,5 @@
 # Valmet Industrial Metaverse — NGSI-LD
 
-[![FIWARE](https://img.shields.io/badge/FIWARE-Core-blue)](https://www.fiware.org/)
-[![NGSI-LD](https://img.shields.io/badge/NGSI--LD-v1.9.1-red)](https://www.etsi.org/technical-groups/data/)
-[![Smart Data Models](https://img.shields.io/badge/Smart%20Data%20Models-Manufacturing-orange)](https://smartdatamodels.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
 An open-source NGSI-LD data model and toolchain for industrial asset management in process manufacturing environments (paper mills, chemical plants, utilities). Built for the [Since AI 2026 Hackathon](https://sinceai.ai/hackathon) in partnership with [Valmet](https://www.valmet.com) and [FIWARE Foundation](https://www.fiware.org).
 
 ---
