@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "$schemaVersion": "0.1.0",
+  "modelTags": "FIWARE, ManufacturingMachine, Valmet, IndustrialAsset",
+  "derivedFrom": "https://github.com/smart-data-models/dataModel.ManufacturingMachine/blob/master/ManufacturingMachine/schema.json",
+  "license": "https://creativecommons.org/licenses/by/4.0",
+  "$id": "https://uri.fiware.org/ns/data-models/valmet/IndustrialAsset-schema.json",
+  "title": "IndustrialAsset — Valmet Industrial Metaverse",
+  "description": "An industrial asset (control valve, pump, motor, sensor, transmitter) in a Valmet paper/process manufacturing environment. Extends SmartDataModels ManufacturingMachine with field-connectivity, criticality and 3D-scene identity properties.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "https://smart-data-models.github.io/data-models/common-schema.json#/definitions/GSMA-Commons"
+    },
+    {
+      "$ref": "https://smart-data-models.github.io/data-models/common-schema.json#/definitions/Location-Commons"
+    },
+    {
+      "properties": {
+        "id": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[\\w\\-\\.\\{\\}\\$\\+\\*\\[\\]`|~^@!,:\\\\]+$" },
+            { "type": "string", "format": "uri" }
+          ],
+          "description": "Unique identifier of the entity — format: urn:ngsi-ld:IndustrialAsset:{asset_id}",
+          "example": "urn:ngsi-ld:IndustrialAsset:ASSET-001"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["IndustrialAsset"],
+          "description": "NGSI-LD Entity type"
+        },
+        "tag": {
+          "type": "object",
+          "description": "Plant tag / instrument tag, e.g. CV-001, P-003, M-002",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "assetClass": {
+          "type": "object",
+          "description": "Equipment class.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": {
+              "type": "string",
+              "enum": ["CONTROL_VALVE","PROCESS_PUMP","ELECTRIC_MOTOR","PRESSURE_TRANSMITTER","VIBRATION_SENSOR"]
+            }
+          }
+        },
+        "areaId": {
+          "type": "object",
+          "description": "Plant area identifier, e.g. AREA-01.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "areaName": {
+          "type": "object",
+          "description": "Human-readable area name, e.g. Stock Preparation.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "processContext": {
+          "type": "object",
+          "description": "Process segment: wet_process, continuous_process, utilities.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "criticality": {
+          "type": "object",
+          "description": "Maintenance criticality classification: A (production critical), B (important), C (standard).",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string", "enum": ["A","B","C"] }
+          }
+        },
+        "installationDate": {
+          "type": "object",
+          "description": "ISO 8601 date-time when the asset was installed.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string", "format": "date-time" }
+          }
+        },
+        "lastServiceDate": {
+          "type": "object",
+          "description": "ISO 8601 date-time of last service.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string", "format": "date-time" }
+          }
+        },
+        "serviceIntervalDays": {
+          "type": "object",
+          "description": "Nominal service interval in days.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "connectivityProfile": {
+          "type": "object",
+          "description": "Field connectivity protocol: OPC_UA, HART, FOUNDATION_FIELDBUS, MQTT_EDGE, SIMULATED_API.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "qrId": {
+          "type": "object",
+          "description": "QR code identifier for physical asset identification.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "nfcId": {
+          "type": "object",
+          "description": "NFC tag identifier for physical asset identification.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string" }
+          }
+        },
+        "dataClassification": {
+          "type": "object",
+          "description": "Data classification: SYNTHETIC or REAL.",
+          "properties": {
+            "type": { "const": "Property" },
+            "value": { "type": "string", "enum": ["SYNTHETIC","REAL","CONFIDENTIAL"] }
+          }
+        },
+        "refSceneAnchor": {
+          "type": "object",
+          "description": "Relationship to the SceneAnchor entity providing 3D position in the industrial metaverse.",
+          "properties": {
+            "type": { "const": "Relationship" },
+            "object": { "type": "string", "format": "uri" }
+          }
+        },
+        "refCondition": {
+          "type": "object",
+          "description": "Relationship to the current AssetCondition entity.",
+          "properties": {
+            "type": { "const": "Relationship" },
+            "object": { "type": "string", "format": "uri" }
+          }
+        }
+      }
+    }
+  ],
+  "required": ["id","type","tag","assetClass","criticality"]
+}

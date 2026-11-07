@@ -1,0 +1,43 @@
+services:
+
+  # ── Valmet NGSI-LD API (serves entities + context file) ─────────────────────
+  valmet-ngsi-ld:
+    build: .
+    container_name: valmet-ngsi-ld
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./entities:/app/entities:ro
+      - ./data-model:/app/data-model:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ── coraine NGSI-LD Context Broker (in-memory, no MongoDB needed) ────────────
+  coraine:
+    image: quay.io/seamware/coraine:0.7.0
+    container_name: coraine
+    ports:
+      - "1026:1026"
+    # corDB = in-memory store (no external DB required)
+    # --defaultUserContext tells coraine where to resolve the Valmet @context
+    # --corsOrigin __ALL  = allow browser requests from any origin
+    # -pp 2               = pretty-print JSON responses
+    command: >
+      --database corDB
+      --apiPlugins admin
+      --pretty-print 2
+      --corsOrigin __ALL
+      --defaultUserContext http://valmet-ngsi-ld:8000/context.jsonld
+    depends_on:
+      valmet-ngsi-ld:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "sh", "-c", "wget -qO- http://localhost:1026/ngsi-ld/v1/types || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
